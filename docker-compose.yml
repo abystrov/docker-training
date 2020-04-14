@@ -28,3 +28,10 @@ services:
           tty: true
           volumes:
             - ./db/:/docker-entrypoint-initdb.d/
+
+         make:
+          build:
+            context: ./makefiles
+            dockerfile: Dockerfile
+          container_name: makefile
+          command: /bin/sh -c 'cd /build' && make build ; ./build/hellomake
