@@ -4,13 +4,14 @@ services:
          app:
           build:
             context: .
-            dockerfile: Dockerfile
+            dockerfile: ./application/Dockerfile
           container_name: app
           tty: true
           volumes: 
-             - ./app/:/app
+             - ./application/app/:/app
           working_dir: /app
           command: gunicorn --bind=0.0.0.0 -w4 simple:app
+          restart: unless-stopped
 
          nginx:
           image: nginx:alpine
@@ -18,3 +19,12 @@ services:
             - ./conf.d/:/etc/nginx/conf.d
           ports:
             - 8080:8080
+
+         db:
+          image: postgres
+          container_name: database
+          environment:
+            - POSTGRES_PASSWORD=P@ssw0rd
+          tty: true
+          volumes:
+            - ./db/:/docker-entrypoint-initdb.d/
