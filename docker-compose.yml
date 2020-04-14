@@ -8,10 +8,12 @@ services:
           container_name: app
           tty: true
           volumes: 
-             - ./application/app/:/app
+            - ./application/app/:/app
           working_dir: /app
-          command: gunicorn --bind=0.0.0.0 -w4 simple:app
+          command: bash -c "tox && gunicorn --bind=0.0.0.0 -w4 simple:app"
           restart: unless-stopped
+          depends_on: 
+            - db
 
          nginx:
           image: nginx:alpine
@@ -19,6 +21,8 @@ services:
             - ./conf.d/:/etc/nginx/conf.d
           ports:
             - 8080:8080
+          depends_on:
+            - app
 
          db:
           image: postgres

@@ -1,1 +1,3 @@
-./application/app/__pycache__
+application/app/.tox/
+application/app/__pycache__/
+application/app/simpleApp.egg-info
