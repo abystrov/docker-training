@@ -1,40 +1,26 @@
-version: '3'
+version: "3"
 services:
+  app:
+    build:
+      context: application/
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - db
 
-         app:
-          build:
-            context: .
-            dockerfile: ./application/Dockerfile
-          container_name: app
-          tty: true
-          volumes: 
-            - ./application/app/:/app
-          working_dir: /app
-          command: bash -c "tox && gunicorn --bind=0.0.0.0 -w4 simple:app"
-          depends_on: 
-            - db
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./conf.d/:/etc/nginx/conf.d
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - app
 
-         nginx:
-          image: nginx:alpine
-          volumes:
-            - ./conf.d/:/etc/nginx/conf.d
-          ports:
-            - 8080:8080
-          depends_on:
-            - app
-
-         db:
-          image: postgres
-          container_name: database
-          environment:
-            - POSTGRES_PASSWORD=P@ssw0rd
-          tty: true
-          volumes:
-            - ./db/:/docker-entrypoint-initdb.d/
-
-         make:
-          build:
-            context: ./makefiles
-            dockerfile: Dockerfile
-          container_name: makefile
-          command: /bin/sh -c 'cd /build' && make build ; ./build/hellomake
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=P@ssw0rd
+    volumes:
+      - ./db/:/docker-entrypoint-initdb.d/

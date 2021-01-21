@@ -1,10 +1,17 @@
-FROM ubuntu:latest
+FROM python:3.7-alpine
 
-RUN apt-get update \
-  && apt-get install -y libpq-dev \
-  && apt-get install -y python3-pip python3-dev curl python3-psycopg2 \
-  && cd /usr/local/bin \
-  && ln -s /usr/bin/python3 python \
-  && pip3 install --upgrade pip
-COPY requirements.txt /tmp/
-RUN pip install -r /tmp/requirements.txt
+WORKDIR /app
+
+RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
+
+RUN pip install pipenv psycopg2
+
+COPY Pipfile .
+COPY Pipfile.lock .
+
+RUN pipenv install --system
+
+COPY app .
+# RUN pipenv shell
+
+CMD gunicorn --bind=0.0.0.0 -w4 simple:app
