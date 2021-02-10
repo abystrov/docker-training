@@ -1,0 +1,13 @@
+name: Testing
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  test:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Echo tag name
+        run: echo  ${{ github.event.release.tag_name }}
