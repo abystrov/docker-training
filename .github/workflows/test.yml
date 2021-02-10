@@ -9,6 +9,4 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: Echo tag name
-        run: echo  $test
-        env:
-          test: ${{ github.event.release.tag_name }}
+        run: echo  ${{ github.event.release.tag_name }}
