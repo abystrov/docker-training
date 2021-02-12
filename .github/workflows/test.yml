@@ -8,7 +8,7 @@ jobs:
   build-images:
     runs-on: ubuntu-latest
     env:
-      PROJECTS: [frontend, backend, ntripcaster]
+      PROJECTS: frontend backend ntripcaster
     steps:
       - name: Login into docker registry
         run: echo $DOCKER_TOKEN | docker login https://docker.pkg.github.com -u $DOCKER_USER --password-stdin
