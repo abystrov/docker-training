@@ -1,12 +1,12 @@
-name: Testing
+name: Continuous Deployment (production)
 
 on:
   release:
     types: [released]
 
 jobs:
-  test:
-    runs-on: "ubuntu-latest"
+  build-images:
+    runs-on: ubuntu-latest
     steps:
-      - name: Echo tag name
-        run: echo  ${{ github.event.release.tag_name }}
+      - name: get commit
+        run: $GITHUB_SHA
