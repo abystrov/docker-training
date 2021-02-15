@@ -1,23 +1,15 @@
 name: Continuous Deployment (production)
 
 on:
-  release:
-    types: [released]
+  push:
+    branches:
+      - master
 
 jobs:
   build-images:
     runs-on: ubuntu-latest
-    env:
-      PROJECTS: frontend backend ntripcaster
     steps:
-      - name: Login into docker registry
-        run: echo $DOCKER_TOKEN | docker login https://docker.pkg.github.com -u $DOCKER_USER --password-stdin
+      - name: Get build URL
+        run: echo $BUILD_URL
         env:
-          DOCKER_TOKEN: ${{ secrets.GH_TOKEN }}
-          DOCKER_USER: ${{ secrets.GH_USER }}
-      - name: Pull latest master images
-        run: for p in $PROJECTS; do docker pull docker.pkg.github.com/emlid/ntrip-caster/$p:7ee1307d538555ccac99b5de6d2e825e06df9def; done
-      - name: Tag images using semver
-        run: for p in $PROJECTS; do docker tag docker.pkg.github.com/emlid/ntrip-caster/$p:7ee1307d538555ccac99b5de6d2e825e06df9def docker.pkg.github.com/emlid/ntrip-caster/$p:${{ github.event.release.tag_name }}; done
-      - name: Push new images
-        run: for p in $PROJECTS; do docker push docker.pkg.github.com/emlid/ntrip-caster/$p:${{ github.event.release.tag_name }}; done
+          BUILD_URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
