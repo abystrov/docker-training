@@ -12,4 +12,4 @@ jobs:
       - name: Get build URL
         run: echo $BUILD
         env:
-          BUILD: github.server_url/github.repository/actions/runs/github.run_id
+          BUILD: ${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}
