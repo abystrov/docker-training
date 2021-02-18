@@ -10,4 +10,4 @@ jobs:
       - name: wait 10
         run: sleep 5
       - name: That's all folks!
-        run: That's all folks!
+        run: echo "That's all folks!"
