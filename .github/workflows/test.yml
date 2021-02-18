@@ -1,11 +1,9 @@
 name: Dependabot test
 
 on:
-  workflow_run:
-    workflows:
-      - CI
+  pull_request_target:
     types:
-      - completed
+      - labeled
 jobs:
   dependabot-pr:
     runs-on: ubuntu-latest
