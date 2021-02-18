@@ -1,8 +1,11 @@
-name: Continuous Deployment (production)
+name: Dependabot test
 
 on:
-  pull_request:
-
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
 jobs:
   dependabot-pr:
     runs-on: ubuntu-latest
@@ -16,5 +19,7 @@ jobs:
         uses: reitermarkus/automerge@v1
         with:
           required-labels: dependency update
+          merge-method: rebase
           token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request: ${{ github.event.inputs.pull-request }}
           dry-run: no
