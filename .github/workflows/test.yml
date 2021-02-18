@@ -1,8 +1,11 @@
-name: Continuous Deployment (production)
+name: Dependabot test
 
 on:
-  pull_request:
-
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
 jobs:
   dependabot-pr:
     runs-on: ubuntu-latest
