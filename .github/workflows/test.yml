@@ -1,15 +1,20 @@
 name: Continuous Deployment (production)
 
 on:
-  push:
-    branches:
-      - master
+  pull_request:
 
 jobs:
-  build-images:
+  dependabot-pr:
     runs-on: ubuntu-latest
+    if: github.actor == 'abystrov'
     steps:
-      - name: Get build URL
-        run: echo $BUILD
-        env:
-          BUILD: ${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}
+      - name: Auto approve
+        uses: hmarr/auto-approve-action@v2.0.0
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Auto merge
+        uses: reitermarkus/automerge@v1
+        with:
+          required-labels: dependency update
+          token: ${{ secrets.GITHUB_TOKEN }}
+          dry-run: no
